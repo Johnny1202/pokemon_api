@@ -9,7 +9,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #3a5a40;
+    color: #ff0d00;
     margin-top: 30px;
     letter-spacing: 2px;
 }
@@ -18,14 +18,14 @@ input#filterInput {
     display: block;
     margin: 20px auto 10px auto;
     padding: 8px 14px;
-    border: 1px solid #b7b7a4;
+    border: 1px solid #b7aea4;
     border-radius: 6px;
     font-size: 1rem;
     width: 250px;
     transition: border 0.2s;
 }
 input#filterInput:focus {
-    border: 1.5px solid #588157;
+    border: 1.5px solid #815757;
     outline: none;
 }
 
@@ -47,7 +47,7 @@ th, td {
 }
 
 th {
-    background: #588157;
+    background: #815757;
     color: #fff;
     font-weight: 600;
     letter-spacing: 1px;
@@ -58,7 +58,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background: #b7e4c7;
+    background: #e4b7b7;
     transition: background 0.2s;
 }
 
@@ -68,7 +68,7 @@ tr:hover {
 }
 
 #pagination button {
-    background: #3a5a40;
+    background: #df3030;
     color: #fff;
     border: none;
     padding: 8px 18px;
@@ -83,13 +83,13 @@ tr:hover {
     cursor: not-allowed;
 }
 #pagination button:hover:not(:disabled) {
-    background: #588157;
+    background: #815757;
     transform: translateY(-2px) scale(1.05);
 }
 
 #pageInfo {
     font-weight: bold;
-    color: #3a5a40;
+    color: #5a3a3a;
     margin: 0 10px;
     font-size: 1.1rem;
 }
