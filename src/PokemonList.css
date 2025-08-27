@@ -1,3 +1,7 @@
+h1{
+  margin-top: 0;
+}
+
 .titulo {
   text-align: center;
   color: #FFCB05; /* Amarillo Pokémon */
@@ -9,12 +13,13 @@
 
 .pokemon-list-container {
   background: linear-gradient(135deg, #3B4CCA 80%, #FFCB05 100%);
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 400px;
-  margin: 30px auto;
+  border-radius: 12px;
+  padding: 10px;
+  max-width: 600px;
+  margin: 5px auto;
   box-shadow: 0 4px 16px #0005;
-  border: 4px solid #FF0000;
+  border: 3px solid #FF0000;
+  width: 600px;
 }
 
 .pokemon-table {
@@ -28,7 +33,7 @@
 
 
 .pokemon-table th, .pokemon-table td {
-  padding: 10px;
+  padding: 6px;
   text-align: left;
   border-bottom: 2px solid #FFCB05;
   color: #fff;
@@ -84,8 +89,8 @@
 }
 
 .filtro-busqueda {
-  width: 100%;
-  padding: 10px;
+  width: 90%;
+  padding: 6px;
   margin-bottom: 18px;
   border-radius: 8px;
   border: 2px solid #3B4CCA;

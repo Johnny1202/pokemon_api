@@ -9,11 +9,16 @@ function PokemonList() {
 
   const pokemonsPerPage = 10;
 
-  // Cargar todos los pokemones una sola vez
+  // Traer todos los pokemones correctamente
   useEffect(() => {
     setLoading(true);
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
-      .then((response) => response.json())
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=1")
+      .then((res) => res.json())
+      .then((data) => {
+        const total = data.count;
+        return fetch(`https://pokeapi.co/api/v2/pokemon?limit=${total}`);
+      })
+      .then((res) => res.json())
       .then((data) => {
         setAllPokemons(data.results);
         setLoading(false);
@@ -35,7 +40,6 @@ function PokemonList() {
     setCurrentPage(1);
   }, [search]);
 
-  // Spinner y espacio reservado para evitar layout shift
   return (
     <div className="pokemon-list-container">
       <h1 className="titulo">Pokemones</h1>
@@ -46,33 +50,35 @@ function PokemonList() {
         onChange={(e) => setSearch(e.target.value)}
         className="filtro-busqueda"
       />
-      <div style={{ minHeight: "320px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {loading ? (
-          <div className="spinner" style={{ color: "#FFCB05", fontWeight: "bold" }}>Cargando...</div>
-        ) : (
-          <table className="pokemon-table">
-            <thead>
+      <div style={{ minHeight: "350px" }}>
+        <table className="pokemon-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
               <tr>
-                <th>#</th>
-                <th>Nombre</th>
+                <td colSpan={2} style={{ textAlign: "center", color: "#FFCB05", fontWeight: "bold" }}>
+                  Cargando...
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {paginatedPokemons.length === 0 ? (
-                <tr>
-                  <td colSpan={2} style={{ textAlign: "center" }}>No se encontraron pokemones</td>
+            ) : paginatedPokemons.length === 0 ? (
+              <tr>
+                <td colSpan={2} style={{ textAlign: "center" }}>No se encontraron pokemones</td>
+              </tr>
+            ) : (
+              paginatedPokemons.map((poke, idx) => (
+                <tr key={poke.name}>
+                  <td>{startIndex + idx + 1}</td>
+                  <td style={{ textTransform: "capitalize" }}>{poke.name}</td>
                 </tr>
-              ) : (
-                paginatedPokemons.map((poke, idx) => (
-                  <tr key={poke.name}>
-                    <td>{startIndex + idx + 1}</td>
-                    <td style={{ textTransform: "capitalize" }}>{poke.name}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        )}
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
       <div className="paginacion">
         <button
