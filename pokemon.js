@@ -34,7 +34,7 @@
             const currentPage = Math.floor(offset / limit) + 1;
             const totalPages = Math.ceil(total / limit);
             pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-            prevBtn.disabled = offset === 0;
+            prevBtn.disabled = offset === 1;
             nextBtn.disabled = offset + limit >= total;
         }
 
