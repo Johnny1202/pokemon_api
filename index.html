@@ -9,34 +9,47 @@
 </head>
 
 <body>
-    <h1>Pokemones</h1>
-    <input type="text" id="filterInput" placeholder="Filtrar por nombre..." />
+    <div class="container card">
+        <header>
+            <h1>Pokédex</h1>
+            <p>Explora el mundo de los Pokémon</p>
+        </header>
 
-    <div id="tableContainer">
-        <div id="spinner" class="table-loading">
-            <div class="loader"></div>
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="filterInput" placeholder="Buscar Pokémon por nombre...">
         </div>
-        <table id="pokemonTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                </tr>
-            </thead>
-            <tbody id="pokemonTableBody">
-                <!-- Pokemones aquí -->
-            </tbody>
-        </table>
-    </div>
 
-    <div id="pagination">
-        <button id="prevBtn" disabled>Anterior</button>
-        <span id="pageInfo">Página 1 de 1</span>
-        <button id="nextBtn">Siguiente</button>
+        <div id="tableContainer">
+            <div class="loading-container" id="spinner">
+                <div class="loader"></div>
+            </div>
+            <table id="pokemonTable">
+                <thead>
+                    <tr>
+                        <th class="id-cell">ID</th>
+                        <th class="name-cell">Nombre</th>
+                    </tr>
+                </thead>
+                <tbody id="pokemonTableBody">
+                    <!-- Los Pokémon se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="pagination">
+            <button id="prevBtn" disabled>
+                <i class="fas fa-chevron-left" style="margin-right: 0.5rem;"></i> Anterior
+            </button>
+            <span id="pageInfo">Página 1 de 1</span>
+            <button id="nextBtn">
+                Siguiente <i class="fas fa-chevron-right" style="margin-left: 0.5rem;"></i>
+            </button>
+        </div>
     </div>
 
     <div class="footer">
-        Mostrando <span id="totalPokemons">0</span> Pokémones
+        <p>Mostrando <span id="shownCount">0</span> de <span id="totalCount">0</span> Pokémon</p>
     </div>
     <script src="pokemon.js"></script>
 </body>

@@ -13,15 +13,12 @@ const pageInfo = document.getElementById("pageInfo");
 const filterInput = document.getElementById("filterInput");
 const spinner = document.getElementById("spinner");
 const pokemonTable = document.getElementById("pokemonTable");
-const tableContainer = document.getElementById("tableContainer");
-const totalPokemons = document.getElementById("totalPokemons");
+const shownCount = document.getElementById("shownCount");
+const totalCount = document.getElementById("totalCount");
 
 function showSpinner(show) {
-  if (show) {
-    tableContainer.classList.remove("table-loaded");
-  } else {
-    tableContainer.classList.add("table-loaded");
-  }
+  spinner.style.display = show ? "flex" : "none";
+  pokemonTable.style.visibility = show ? "hidden" : "visible";
 }
 
 async function fetchAllPokemons() {
@@ -32,21 +29,40 @@ async function fetchAllPokemons() {
     const res = await fetch(`${apiUrl}?limit=1`);
     const data = await res.json();
     total = data.count;
-    totalPokemons.textContent = total;
+    totalCount.textContent = total;
 
     // Traer todos los pokemones
     const resAll = await fetch(`${apiUrl}?limit=${total}`);
     const dataAll = await resAll.json();
-    allPokemons = dataAll.results;
+
+    // Guardar con ID real
+    allPokemons = dataAll.results.map((pokemon, index) => {
+      // Extraer el ID de la URL
+      const urlParts = pokemon.url.split("/");
+      const id = parseInt(urlParts[urlParts.length - 2]);
+      return {
+        ...pokemon,
+        id: id,
+      };
+    });
+
     filteredPokemons = allPokemons;
+    shownCount.textContent = filteredPokemons.length;
 
     showSpinner(false);
     renderTable();
     updatePagination();
   } catch (error) {
     console.error("Error fetching Pokémon data:", error);
-    spinner.innerHTML =
-      '<div class="no-results">Error al cargar los datos. Intenta nuevamente.</div>';
+    tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="no-results">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>Error al cargar los datos. Intenta nuevamente.</div>
+                        </td>
+                    </tr>
+                `;
+    showSpinner(false);
   }
 }
 
@@ -56,16 +72,28 @@ function renderTable() {
   const pokemonsToShow = filteredPokemons.slice(start, end);
 
   if (filteredPokemons.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="2" class="no-results">No se encontraron pokemones</td></tr>`;
+    tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="no-results">
+                            <i class="fas fa-search"></i>
+                            <div>No se encontraron Pokémon</div>
+                        </td>
+                    </tr>
+                `;
     return;
   }
 
   tableBody.innerHTML = pokemonsToShow
     .map(
-      (p, i) => `
+      (pokemon) => `
                 <tr>
-                    <td>${start + i + 1}</td>
-                    <td>${p.name.charAt(0).toUpperCase() + p.name.slice(1)}</td>
+                    <td class="id-cell">#${pokemon.id
+                      .toString()
+                      .padStart(3, "0")}</td>
+                    <td class="name-cell">${
+                      pokemon.name.charAt(0).toUpperCase() +
+                      pokemon.name.slice(1)
+                    }</td>
                 </tr>
             `
     )
@@ -98,18 +126,16 @@ nextBtn.addEventListener("click", () => {
 
 filterInput.addEventListener("input", () => {
   const filter = filterInput.value.trim().toLowerCase();
-  filteredPokemons = allPokemons.filter((p) => p.name.includes(filter));
+  filteredPokemons = allPokemons.filter((p) =>
+    p.name.toLowerCase().includes(filter)
+  );
   currentPage = 1;
+  shownCount.textContent = filteredPokemons.length;
   renderTable();
   updatePagination();
-  totalPokemons.textContent = filteredPokemons.length;
 });
 
 // Inicializar
 document.addEventListener("DOMContentLoaded", function () {
   fetchAllPokemons();
-
-  // Asegurarse de que los botones sean visibles
-  prevBtn.style.visibility = "visible";
-  nextBtn.style.visibility = "visible";
 });
