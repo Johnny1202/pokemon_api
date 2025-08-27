@@ -1,58 +1,89 @@
- const apiUrl = 'https://pokeapi.co/api/v2/pokemon';
-        const limit = 10;
-        let offset = 0;
-        let total = 0;
-        let pokemons = [];
+const apiUrl = 'https://pokeapi.co/api/v2/pokemon';
+const limit = 10;
+let offset = 0;
+let total = 0;
+let allPokemons = []; // Lista global de todos los pokemones
+let filteredPokemons = []; // Lista filtrada
+let currentPage = 1;
 
-        const tableBody = document.getElementById('pokemonTableBody');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const pageInfo = document.getElementById('pageInfo');
-        const filterInput = document.getElementById('filterInput');
+const tableBody = document.getElementById('pokemonTableBody');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const pageInfo = document.getElementById('pageInfo');
+const filterInput = document.getElementById('filterInput');
+const spinner = document.getElementById('spinner');
 
-        async function fetchPokemons() {
-            const res = await fetch(`${apiUrl}?limit=${limit}&offset=${offset}`);
-            const data = await res.json();
-            pokemons = data.results;
-            total = data.count;
-            renderTable();
-            updatePagination();
-        }
+function showSpinner(show) {
+    spinner.style.display = show ? 'block' : 'none';
+}
 
-        function renderTable() {
-            const filter = filterInput.value.trim().toLowerCase();
-            const filtered = pokemons.filter(p => p.name.includes(filter));
-            tableBody.innerHTML = filtered.map((p, i) => `
-                <tr>
-                    <td>${offset + i + 1}</td>
-                    <td>${p.name}</td>
-                </tr>
-            `).join('');
-        }
+async function fetchAllPokemons() {
+    showSpinner(true);
+    // Primero obtenemos el total de pokemones
+    const res = await fetch(`${apiUrl}?limit=1`);
+    const data = await res.json();
+    total = data.count;
+    // Ahora traemos todos los pokemones (solo nombre y url)
+    const resAll = await fetch(`${apiUrl}?limit=${total}`);
+    const dataAll = await resAll.json();
+    allPokemons = dataAll.results;
+    filteredPokemons = allPokemons;
+    showSpinner(false);
+    renderTable();
+    updatePagination();
+}
 
-        function updatePagination() {
-            const currentPage = Math.floor(offset / limit) + 1;
-            const totalPages = Math.ceil(total / limit);
-            pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-            prevBtn.disabled = offset === 1;
-            nextBtn.disabled = offset + limit >= total;
-        }
+function renderTable() {
+    // Calcula el offset según la página actual y el filtro
+    const start = (currentPage - 1) * limit;
+    const end = start + limit;
+    const pokemonsToShow = filteredPokemons.slice(start, end);
 
-        prevBtn.onclick = () => {
-            if (offset >= limit) {
-                offset -= limit;
-                fetchPokemons();
-            }
-        };
+    // Si no hay resultados
+    if (filteredPokemons.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="2">No se encontraron pokemones</td></tr>`;
+        return;
+    }
 
-        nextBtn.onclick = () => {
-            if (offset + limit < total) {
-                offset += limit;
-                fetchPokemons();
-            }
-        };
+    tableBody.innerHTML = pokemonsToShow.map((p, i) => `
+        <tr>
+            <td>${start + i + 1}</td>
+            <td>${p.name}</td>
+        </tr>
+    `).join('');
+}
 
-        filterInput.oninput = renderTable;
+function updatePagination() {
+    const totalPages = Math.ceil(filteredPokemons.length / limit) || 1;
+    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+}
 
-        // Inicializar
-        fetchPokemons();
+prevBtn.onclick = () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+        updatePagination();
+    }
+};
+
+nextBtn.onclick = () => {
+    const totalPages = Math.ceil(filteredPokemons.length / limit) || 1;
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+        updatePagination();
+    }
+};
+
+filterInput.oninput = () => {
+    const filter = filterInput.value.trim().toLowerCase();
+    filteredPokemons = allPokemons.filter(p => p.name.includes(filter));
+    currentPage = 1;
+    renderTable();
+    updatePagination();
+};
+
+// Inicializar
+fetchAllPokemons();

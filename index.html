@@ -1,32 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Pokemones</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Pokemones</h1>
     <input type="text" id="filterInput" placeholder="Filtrar por nombre...">
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody id="pokemonTableBody">
-            <!-- Pokemones aquí -->
-        </tbody>
-    </table>
-    <div id="pagination">
-        <button id="prevBtn">Anterior</button>
-        <span id="pageInfo"></span>
-        <button id="nextBtn">Siguiente</button>
+    <div id="tableContainer" style="min-height: 350px; position: relative;">
+        <div id="spinner" style="display:none; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);">
+            <div class="loader"></div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody id="pokemonTableBody">
+                <!-- Pokemones aquí -->
+            </tbody>
+        </table>
     </div>
-
+    <div id="pagination">
+        <button id="prevBtn" disabled>Anterior</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn" disabled>Siguiente</button>
+    </div>
     <script src="pokemon.js"></script>
-
 </body>
 </html>
