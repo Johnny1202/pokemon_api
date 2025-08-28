@@ -7,20 +7,26 @@
     <title>Pokemones</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
 <body>
 
     <div class="container card">
         <header>
-            <h1>Pokédex</h1>
+            <h1>Pokédex Avanzada</h1>
             <p>Explora el mundo de los Pokémon</p>
         </header>
 
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="filterInput" placeholder="Buscar Pokémon por nombre...">
+        <div class="controls">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="filterInput" placeholder="Buscar Pokémon por nombre...">
+            </div>
+
+            <div class="favorites-filter">
+                <input type="checkbox" id="favoritesOnly">
+                <label for="favoritesOnly">Solo favoritos</label>
+            </div>
         </div>
 
         <div id="tableContainer">
@@ -32,6 +38,7 @@
                     <tr>
                         <th class="id-cell">ID</th>
                         <th class="name-cell">Nombre</th>
+                        <th class="favorite-cell">❤️</th>
                     </tr>
                 </thead>
                 <tbody id="pokemonTableBody">
@@ -53,6 +60,38 @@
 
     <div class="footer">
         <p>Mostrando <span id="shownCount">0</span> de <span id="totalCount">0</span> Pokémon</p>
+    </div>
+
+    <!-- Detalles del Pokémon -->
+    <div id="pokemonDetail">
+        <div class="detail-container">
+            <div class="detail-header">
+                <h2 id="detailName">Pokémon Name</h2>
+                <button class="detail-close" id="detailClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="detail-content">
+                <div class="detail-image">
+                    <img id="detailImage" src="" alt="Pokémon">
+                </div>
+                <div class="detail-info">
+                    <p><strong>ID:</strong> <span id="detailId"></span></p>
+                    <p><strong>Altura:</strong> <span id="detailHeight"></span></p>
+                    <p><strong>Peso:</strong> <span id="detailWeight"></span></p>
+
+                    <div class="detail-types">
+                        <strong>Tipos:</strong>
+                        <div id="detailTypes"></div>
+                    </div>
+
+                    <div class="detail-stats">
+                        <h3>Estadísticas</h3>
+                        <div id="detailStats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="pokemon.js"></script>
 </body>
