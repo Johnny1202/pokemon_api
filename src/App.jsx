@@ -1,20 +1,15 @@
-import React from 'react';
-import PokemonList from './pokemonList';
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PokemonList from "./components/PokemonList/pokemonList";
+import PokemonDetails from "./pages/PokemonDetails";
 
-
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <h1 className='titulo'>Lista de Pokemon</h1>
-      <PokemonList />
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<PokemonList />} />
+        <Route path="/pokemon/:id" element={<PokemonDetails />} />
+      </Routes>
+    </Router>
+  );
 }
-
-export default App
