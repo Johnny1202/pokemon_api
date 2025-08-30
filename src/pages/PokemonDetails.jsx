@@ -39,14 +39,20 @@ export default function PokemonDetails() {
     loadPokemon();
   }, [id]);
 
-  if (!pokemon) {
-    return <div className="flex justify-center items-center h-screen text-gray-600">Loading...</div>;
-  }
+  if (!pokemon)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6">
-        <button className="mb-4 text-blue-600 hover:underline" onClick={() => navigate(-1)}>
+    <div className="min-h-screen px-2 sm:px-4 md:px-6 bg-gray-100 p-4">
+      <div className="max-w-full sm:max-w-xl mx-auto bg-white rounded-xl shadow-md p-4 sm:p-6">
+        <button
+          className="mb-4 text-blue-600 hover:underline"
+          onClick={() => navigate(-1)}
+        >
           ⬅ Back
         </button>
 
@@ -54,20 +60,25 @@ export default function PokemonDetails() {
           <img
             src={pokemon.sprites.other["official-artwork"].front_default}
             alt={pokemon.name}
-            className="mx-auto w-40 h-40"
+            className="mx-auto w-32 sm:w-40 md:w-48 h-auto"
           />
-          <h1 className="text-3xl font-bold capitalize text-gray-800">{pokemon.name}</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize text-gray-800">
+            {pokemon.name}
+          </h1>
           <p className="text-gray-500">#{pokemon.id}</p>
         </div>
 
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold text-gray-700">Type</h2>
-          <div className="flex gap-2 mt-2">
+        <div className="mt-4">
+          <h2 className="text-lg font-semibold text-gray-700">Types</h2>
+          <div className="flex flex-wrap gap-2 mt-2">
             {pokemon.types.map((t) => (
               <span
                 key={t.type.name}
-                className="px-3 py-1 rounded-full text-sm font-medium"
-                style={{ backgroundColor: getTypeColor(t.type.name), color: "#fff" }}
+                className="px-2 py-1 text-sm sm:text-base rounded-full font-medium"
+                style={{
+                  backgroundColor: getTypeColor(t.type.name),
+                  color: "#fff",
+                }}
               >
                 {t.type.name.charAt(0).toUpperCase() + t.type.name.slice(1)}
               </span>
@@ -75,11 +86,11 @@ export default function PokemonDetails() {
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-4">
           <h2 className="text-lg font-semibold text-gray-700">Stats</h2>
-          <ul className="mt-2 space-y-2">
+          <ul className="mt-2 space-y-1">
             {pokemon.stats.map((s) => (
-              <li key={s.stat.name} className="flex justify-between">
+              <li key={s.stat.name} className="flex justify-between text-sm sm:text-base">
                 <span className="capitalize">{s.stat.name}</span>
                 <span className="font-medium">{s.base_stat}</span>
               </li>
